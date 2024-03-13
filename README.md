@@ -6,6 +6,9 @@ DoNotEatItems
 
 Always drop items on death
 
+#
+**WARNING!** <u>all players need to have the mod installed</u>
+
 Installation
 ------------
 

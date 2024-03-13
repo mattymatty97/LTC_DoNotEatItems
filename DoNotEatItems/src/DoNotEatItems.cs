@@ -11,7 +11,7 @@ namespace DoNotEatItems
     {
         public const string GUID = "mattymatty.DoNotEatItems";
         public const string NAME = "DoNotEatItems";
-        public const string VERSION = "1.0.0";
+        public const string VERSION = "2.0.0";
 
         internal static ManualLogSource Log;
 
