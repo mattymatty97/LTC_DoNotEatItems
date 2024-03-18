@@ -17,15 +17,14 @@
         <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1" PrivateAssets="all"/>
 
         <!-- Publicize directly when referencing -->
-        <Reference Include="..\Dependencies\Assembly-CSharp.dll" Publicize="true"/>
-        <Reference Include="..\Dependencies\Assembly-CSharp-firstpass.dll" Publicize="true"/>
-        <Reference Include="..\Dependencies\Facepunch.Steamworks.Win64.dll" Publicize="true"/>
-        <Reference Include="..\Dependencies\Unity.Netcode.Runtime.dll" Publicize="true"/>
-        <Reference Include="..\Dependencies\Unity.Netcode.Components.dll" Publicize="true"/>
-        <Reference Include="..\Dependencies\UnityEngine.CoreModule.dll" Publicize="true"/>
+        <Reference Include="$(GameDirectory)\Lethal Company_Data\Managed\Assembly-CSharp.dll" Publicize="true"/>
+        <Reference Include="$(GameDirectory)\Lethal Company_Data\Managed\Assembly-CSharp-firstpass.dll" Publicize="true"/>
 
         <!-- clean referencing -->
-        <Reference Include="..\Dependencies\Unity.TextMeshPro.dll" Publicize="false"/>
+        <Reference Include="$(GameDirectory)\Lethal Company_Data\Managed\UnityEngine.dll" Publicize="false"/>
+        <Reference Include="$(GameDirectory)\Lethal Company_Data\Managed\UnityEngine.CoreModule.dll" Publicize="false"/>
+        <Reference Include="$(GameDirectory)\Lethal Company_Data\Managed\Unity.Netcode.Runtime.dll" Publicize="false"/>
+        <Reference Include="$(GameDirectory)\Lethal Company_Data\Managed\Unity.TextMeshPro.dll" Publicize="false"/>
     </ItemGroup>
     
     <!-- Ensure the user (you!) has actually set everything up properly. -->
@@ -43,10 +42,14 @@
     <!-- Ensure that the defined game directory path is valid. -->
     <Target Name="EnsureGameDirectoryExists" AfterTargets="EnsureGameDirectoryDefined">
         <Error Condition="!Exists('$(GameDirectory)')" Text="$(GameDirError)"/>
+    </Target>    
+    <!-- Ensure that the defined game directory path is valid. -->
+    <Target Name="EnsureProfileDirectoryExists" AfterTargets="EnsureProfileDirectoryDefined">
+        <Error Condition="!Exists('$(ProfileDirectory)')" Text="$(GameDirError)"/>
     </Target>
     <PropertyGroup>
         <!-- The mod directory to install our mod to. -->
-        <ModDirectory>$(GameDirectory)\BepInEx\plugins\0-$(AssemblyName)</ModDirectory>
+        <ModDirectory>$(ProfileDirectory)\BepInEx\plugins\0-$(AssemblyName)</ModDirectory>
         <!-- Where to create the temporary directory for creating the release zip files. -->
         <TempZipDir>$(OutputPath)ZipMeUp</TempZipDir>
         <!-- The internal structure of the zip file. -->
@@ -57,6 +60,7 @@
     <Target Name="CopyToGameFolder" AfterTargets="Build">
         <Message Importance="high" Text="Copying files to game directory."/>
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModDirectory)"/>
+        <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(ModDirectory)"/>
         <Copy SourceFiles="@(Assets)" DestinationFolder="$(ModDirectory)\%(Assets.RelativeDir)"/>
     </Target>
 
@@ -75,6 +79,7 @@
     <Target Name="PrepareZip" AfterTargets="Build" Condition="$(Configuration.Contains('Release'))">
         <Message Importance="normal" Text="Copying files to temporary directory."/>
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(TempZipDir)\$(ZipStructure)"/>
+        <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TempZipDir)\$(ZipStructure)"/>
         <Copy SourceFiles="@(Assets)" DestinationFolder="$(TempZipDir)\$(ZipStructure)\%(Assets.RelativeDir)"/>
         <Copy SourceFiles="@(ThunderStoreItems)" DestinationFolder="$(TempZipDir)\$(ThunderStoreItems)"/>
     </Target>
