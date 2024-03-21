@@ -2,16 +2,18 @@
 using System.Reflection;
 using BepInEx;
 using BepInEx.Logging;
+using DoNotEatItems.Dependency;
 using HarmonyLib;
 
 namespace DoNotEatItems
 {
     [BepInPlugin(GUID, NAME, VERSION)]
+    [BepInDependency("BMX.LobbyCompatibility", BepInDependency.DependencyFlags.SoftDependency)]
     internal class DoNotEatItems : BaseUnityPlugin
     {
         public const string GUID = "mattymatty.DoNotEatItems";
         public const string NAME = "DoNotEatItems";
-        public const string VERSION = "2.0.0";
+        public const string VERSION = "2.0.2";
 
         internal static ManualLogSource Log;
 
@@ -20,6 +22,9 @@ namespace DoNotEatItems
             Log = Logger;
             try
             {
+                if (LobbyCompatibilityChecker.Enabled)
+                    LobbyCompatibilityChecker.Init();
+                
                 Log.LogInfo("Patching Methods");
                 var harmony = new Harmony(GUID);
                 harmony.PatchAll(Assembly.GetExecutingAssembly());

@@ -1,9 +1,10 @@
 {
   "name": "DoNotEatItems",
-  "version_number": "2.0.0",
+  "version_number": "2.0.2",
   "website_url": "https://github.com/mattymatty97/LTC_DoNotEatItems",
   "description": "Always drop items on death",
   "dependencies": [
-    "BepInEx-BepInExPack-5.4.2100"
+    "BepInEx-BepInExPack-5.4.2100",
+    "BMX-LobbyCompatibility-1.0.1"
   ]
 }
